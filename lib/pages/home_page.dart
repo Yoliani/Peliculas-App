@@ -23,16 +23,25 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _swiperTarjetas() {
-    return new Swiper(
-      itemBuilder: (BuildContext context, int index) {
-        return new Image.network(
-          "http://via.placeholder.com/350x150",
-          fit: BoxFit.fill,
-        );
-      },
-      itemCount: 3,
-      pagination: new SwiperPagination(),
-      control: new SwiperControl(),
+    return Container(
+      padding: EdgeInsets.only(top: 10.0),
+      width: double.infinity,
+      height: 300.0,
+      child: Swiper(
+        layout: SwiperLayout.STACK,
+        itemBuilder: (BuildContext context, int index) {
+          return new Image.network(
+            "http://via.placeholder.com/350x150",
+            fit: BoxFit.fill,
+          );
+        },
+        itemCount: 3,
+        itemWidth: 200.0,
+        //Para ver la cantidad de paginas como puntos
+        //pagination: new SwiperPagination(),
+        //ver flechas a los lados
+        //control: new SwiperControl(),
+      ),
     );
   }
 }
