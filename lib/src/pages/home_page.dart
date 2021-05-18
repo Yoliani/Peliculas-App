@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:peliculas/src/providers/peliculas_provider.dart';
+import 'package:peliculas/src/search/search_delegate.dart';
 import 'package:peliculas/src/widgets/card_swiper_widget.dart';
 import 'package:peliculas/src/widgets/movie_horizontal.dart';
 
 class HomePage extends StatelessWidget {
   final peliculasProvider = new PeliculasProvider();
+
   @override
   Widget build(BuildContext context) {
+    peliculasProvider.getPopulares();
     return Scaffold(
       appBar: AppBar(
         title: Text('Películas en cines'),
         backgroundColor: Colors.indigoAccent,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: DataSearch(),
+                  //query: 'Hola'
+                );
+              })
         ],
       ),
       body: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _swiperTarjetas(),
             _footer(context),
@@ -60,11 +71,14 @@ class HomePage extends StatelessWidget {
           SizedBox(
             height: 5.0,
           ),
-          FutureBuilder(
-            future: peliculasProvider.getPopulares(),
+          StreamBuilder(
+            stream: peliculasProvider.popularesStream,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                return MovieHorizontal(peliculas: snapshot.data);
+                return MovieHorizontal(
+                  peliculas: snapshot.data,
+                  siguientePagina: peliculasProvider.getPopulares,
+                );
               } else {
                 return Container(
                     height: 400,
